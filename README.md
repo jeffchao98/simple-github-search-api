@@ -28,7 +28,7 @@
 
 ## Usage
 
-- When your application start, you should initialize the library using the snippet below:
+- When your application start, you should initialize the library using the constructor `GitRepoSearcher(Context context)` as the followng sameple:
 
 ```Java
         GitRepoSearcher searcher =  new GitRepoSearcher(this);
@@ -48,7 +48,7 @@
         })
 ```
 
-- You also can setup the callback with the interface `RequestFetchListener` for receive the fetch result when initial the library as the following.
+- You also can setup the callback with the interface `RequestFetchListener` when initial the library with the extended constructor `GitRepoSearcher(Context context, RequestFetchListener callback)` as the following.
 
 ```Java
         GitRepoSearcher searcher =  new GitRepoSearcher(this, new RequestFetchListener() {
