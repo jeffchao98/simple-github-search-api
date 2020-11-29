@@ -28,13 +28,21 @@
 
 ## Usage
 
-- When your application start, you should initialize the library using the constructor `GitRepoSearcher(Context context)` as the followng sameple:
+#### Constructor
+
+> GitRepoSearcher(Context context)
+
+- When your application start, you should initialize the library using the constructor as the followng sameple:
 
 ```Java
         GitRepoSearcher searcher =  new GitRepoSearcher(this);
 ```
 
-- In order to listen the search result and access the detail data, you need to setup the callback with the method `void setFetchCallback(RequestFetchListener callback)` , sample as the following:
+#### Callback setup method
+
+> void setFetchCallback(RequestFetchListener callback)
+
+- In order to listen the search result and access the detail data in the logic, you need to setup the callback, sample as the following:
   - The boolean value `success` indicate if the search via github api is success or not
   - The `RepoItem` list indicate the fetched items
 
@@ -48,7 +56,11 @@
         })
 ```
 
-- You also can setup the callback with the interface `RequestFetchListener` when initial the library with the extended constructor `GitRepoSearcher(Context context, RequestFetchListener callback)` as the following.
+#### Extended constructor
+
+> GitRepoSearcher(Context context, RequestFetchListener callback)
+
+- You also can setup the callback with the interface `RequestFetchListener` when initial the library with the extended constructor as the following.
 
 ```Java
         GitRepoSearcher searcher =  new GitRepoSearcher(this, new RequestFetchListener() {
@@ -69,5 +81,9 @@
 | language | String | using language of the fetched repo info |
 | privateStatus | String | private status of the fetched repo info |
 
-- For execute search, you can use the method `void searchWith(String platform, String organization)` after initial the library and setup the callback.
+#### Search method
+
+> void searchWith(String platform, String organization)
+
+- For execute search, you can use the method after initial the library.
   - This method still can run without setup callback, the `Info` debug nessage will print out the `description` in each fetched list data if exist.
