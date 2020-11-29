@@ -21,14 +21,40 @@
 
 ```
 
-### Manually
+### Manually import the SDK
 
-### Auto ( via Maven ) 
+- After compile the whole project completed, you can find the `.aar` file in the path `${repo root path}/TinyRepoSearcher/GithubSearcher/build/outputs/aar`
+- Copy-paste the aar file to the path `${project root path}/app/libs` your project ( you can create `libs` folder if not created yet )
+- In the gradle script of your project ( app level ) add the `repositories` for include the `libs` folder before the `dependencies` section, as the followng example:
+
+```gradle
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+dependencies {
+...
+```
+
+- In the `dependencies` section of the app-level gradle script, add the followinf three implementation statements import this SDK and the related resources
+
+```gradle
+dependencies {
+    ...
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation(name: 'GithubSearcher-debug', ext: 'aar')
+    ...
+}
+```
+
+### Auto import the SDK ( via Maven )
 - Coming soon...
 
 ## Usage
 
-#### Constructor
+### Constructor
 
 > GitRepoSearcher(Context context)
 
@@ -38,7 +64,7 @@
         GitRepoSearcher searcher =  new GitRepoSearcher(this);
 ```
 
-#### Callback setup method
+### Callback setup method
 
 > void setFetchCallback(RequestFetchListener callback)
 
@@ -56,7 +82,7 @@
         })
 ```
 
-#### Extended constructor
+### Extended constructor
 
 > GitRepoSearcher(Context context, RequestFetchListener callback)
 
@@ -81,7 +107,7 @@
 | language | String | using language of the fetched repo info |
 | privateStatus | String | private status of the fetched repo info |
 
-#### Search method
+### Search method
 
 > void searchWith(String platform, String organization)
 
