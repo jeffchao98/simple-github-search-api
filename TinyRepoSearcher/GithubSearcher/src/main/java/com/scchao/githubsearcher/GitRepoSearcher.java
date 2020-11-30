@@ -57,7 +57,7 @@ public class GitRepoSearcher {
         }
         Log.i(LOG_TAG, String.format("Fetched items count: %d", items.size()));
         for (RepoItem item : items) {
-            Log.i(LOG_TAG, item.description == null ? "" : item.description);
+            Log.i(LOG_TAG, item.toString());
         }
     }
 }

@@ -17,4 +17,15 @@ public class RepoItem {
 
     @SerializedName("private")
     public Boolean privateStatus;
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\nname: %s \nfull_name: %s \ndescription: %s \nlanguage: %s \nprivate: %s",
+                name == null ? "" : name,
+                fullName == null ? "" : fullName,
+                description == null ? "" : description,
+                language == null ? "" : language,
+                privateStatus == null ? "Null" : String.valueOf(privateStatus));
+    }
 }
