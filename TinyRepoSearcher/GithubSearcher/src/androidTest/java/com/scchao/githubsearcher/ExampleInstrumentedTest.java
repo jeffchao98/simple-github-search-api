@@ -1,20 +1,14 @@
 package com.scchao.githubsearcher;
 
-import android.content.Context;
-
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.scchao.githubsearcher.interfaces.RequestFetchListener;
+import com.scchao.githubsearcher.helper.DataParser;
 import com.scchao.githubsearcher.models.RepoItem;
+import com.scchao.githubsearcher.models.RepoSearchResult;
 
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -23,35 +17,48 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-    Context context;
-    GitRepoSearcher searcher;
 
-    @Before
-    public void beforeTest() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        searcher = new GitRepoSearcher(context);
+    @Test
+    public void normalParserTestCase() {
+        String rawData = "{'items':[{" +
+                "'name': 'test01','full_name': 'test01_full'," +
+                "'description': 'description of test01'," +
+                "'language': 'Python','private': true}]}";
+        RepoItem verifyItem = new RepoItem();
+        verifyItem.name = "test01";
+        verifyItem.fullName = "test01_full";
+        verifyItem.description = "description of test01";
+        verifyItem.language = "Python";
+        verifyItem.privateStatus = true;
+        RepoSearchResult testParsedData = DataParser.parserResult(rawData);
+        Assert.assertEquals(1, testParsedData.items.size());
+        RepoItem fetchedFirstItem = testParsedData.items.get(0);
+        Assert.assertEquals(verifyItem.name, fetchedFirstItem.name);
+        Assert.assertEquals(verifyItem.fullName, fetchedFirstItem.fullName);
+        Assert.assertEquals(verifyItem.description, fetchedFirstItem.description);
+        Assert.assertEquals(verifyItem.language, fetchedFirstItem.language);
+        Assert.assertEquals(verifyItem.privateStatus, fetchedFirstItem.privateStatus);
     }
 
     @Test
-    public void normalFetchParserCase() {
-        searcher.searchWith("android", "rakutentech",
-                new RequestFetchListener() {
-                    @Override
-                    public void onFetch(boolean success, List<RepoItem> items) {
-                        assertEquals(true, success);
-                        assertTrue(items.size() > 0);
-                    }
-                });
+    public void exceptParserTestCaseWithInvalidData() {
+        String rawData = "{'items':[{'name': 'test01','full_name': 'test01_full','description': 'description of test01','language': 'Java','private': true,}],}";
+        RepoSearchResult testParsedData = DataParser.parserResult(rawData);
+        Assert.assertEquals(0, testParsedData.items.size());
     }
 
     @Test
-    public void fetchParserCaseWithRandomInput() {
-        searcher.searchWith("adakjdjln", "klklejlkr",
-                new RequestFetchListener() {
-                    @Override
-                    public void onFetch(boolean success, List<RepoItem> items) {
-                        assertEquals(false, success);
-                    }
-                });
+    public void exceptParserTestCaseWithEmptyItems() {
+        String rawData = "{'items':[]}";
+        RepoSearchResult testParsedData = DataParser.parserResult(rawData);
+        Assert.assertEquals(0, testParsedData.items.size());
     }
+
+    @Test
+    public void exceptParserTestCaseWithEmptyData() {
+        String rawData = "{}";
+        RepoSearchResult testParsedData = DataParser.parserResult(rawData);
+        Assert.assertEquals(0, testParsedData.items.size());
+    }
+
 }
