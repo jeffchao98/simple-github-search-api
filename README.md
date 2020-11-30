@@ -49,9 +49,6 @@ dependencies {
 }
 ```
 
-### Auto import the SDK ( via Maven )
-- Coming soon...
-
 ## Usage
 
 ### Constructor
@@ -64,40 +61,16 @@ dependencies {
         GitRepoSearcher searcher =  new GitRepoSearcher(this);
 ```
 
-### Callback setup method
+### Search method
 
-> void setFetchCallback(RequestFetchListener callback)
+> void searchWith(String platform, String organization, RequestFetchListener callback)
 
-- In order to listen the search result and access the detail data in the logic, you need to setup the callback, sample as the following:
+- For execute search, you can use the method after initial the library.
+  - This method still can run without setup callback, the `Info` debug nessage will print out the `description` in each fetched list data if exist.
+
+- In order to listen the search result and access the detail data in the logic, you need `RequestFetchListener` interface for build the callback, which will return two attribtues:
   - The boolean value `success` indicate if the search via github api is success or not
-  - The `RepoItem` list indicate the fetched items
-
-```Java
-        searcher.setFetchCallback(new RequestFetchListener() {
-            @Override
-            public void onFetch(boolean success, List<RepoItem> items) {
-                Log.i("MainActivity", "success");
-                // Your process logic here
-            }
-        })
-```
-
-### Extended constructor
-
-> GitRepoSearcher(Context context, RequestFetchListener callback)
-
-- You also can setup the callback with the interface `RequestFetchListener` when initial the library with the extended constructor as the following.
-
-```Java
-        GitRepoSearcher searcher =  new GitRepoSearcher(this, new RequestFetchListener() {
-            @Override
-            public void onFetch(boolean success, List<RepoItem> items) {
-                Log.i("MainActivity", "success");
-            }
-        });
-```
-
-- The class `RepoItem` including the following attributes:
+  - The `RepoItem` list indicate the fetched items, attributes as the following
 
 | Name | Type | description |
 | --- | --- | --- |
@@ -107,9 +80,15 @@ dependencies {
 | language | String | using language of the fetched repo info |
 | privateStatus | String | private status of the fetched repo info |
 
-### Search method
+- For using the method, sameple as the follwoing
 
-> void searchWith(String platform, String organization)
+```Java
+        RequestFetchListener listener = new RequestFetchListener() {
+            @Override
+            public void onFetch(boolean success, List<RepoItem> items) {
+                Log.i("MainActivity", "success");
+            }
+        };
+        searcher.searchWith("android", "google", listener);
+```
 
-- For execute search, you can use the method after initial the library.
-  - This method still can run without setup callback, the `Info` debug nessage will print out the `description` in each fetched list data if exist.

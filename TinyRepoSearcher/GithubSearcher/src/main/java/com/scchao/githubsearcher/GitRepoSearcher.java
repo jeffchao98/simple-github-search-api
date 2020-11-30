@@ -18,31 +18,19 @@ import java.util.List;
 public class GitRepoSearcher {
     private static final String LOG_TAG = "GitRepoSearcher";
 
-    private Context context;
     private RequestQueue requestQueue;
-    private RequestFetchListener callback;
 
     public GitRepoSearcher(Context context) {
-        this.context = context;
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public GitRepoSearcher(Context context, RequestFetchListener callback) {
-        this(context);
-        setFetchCallback(callback);
-    }
-
-    public void setFetchCallback(RequestFetchListener callback) {
-        this.callback = callback;
-    }
-
-    public void searchWith(String platform, String organization) {
+    public void searchWith(String platform, String organization, RequestFetchListener callback) {
         String queryUrl = String.format(
                 "https://api.github.com/search/repositories?q=%s+org:%s", platform, organization);
-        requestQueue.add(makeVolleyRequest(queryUrl));
+        requestQueue.add(makeVolleyRequest(queryUrl, callback));
     }
 
-    private StringRequest makeVolleyRequest(String url) {
+    private StringRequest makeVolleyRequest(String url, final RequestFetchListener callback) {
         return new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

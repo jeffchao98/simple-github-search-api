@@ -17,14 +17,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        GitRepoSearcher searcher =  new GitRepoSearcher(this, new RequestFetchListener() {
+
+        GitRepoSearcher searcher =  new GitRepoSearcher(this);
+        RequestFetchListener listener = new RequestFetchListener() {
             @Override
             public void onFetch(boolean success, List<RepoItem> items) {
                 Log.i("MainActivity", "success");
             }
-        });
-        searcher.searchWith("android", "rakutentech");
-        searcher.searchWith("android", "google");
-        searcher.searchWith("adakjdjln", "klklejlkr");
+        };
+        searcher.searchWith("android", "rakutentech", listener);
+        searcher.searchWith("android", "google", listener);
+        searcher.searchWith("adakjdjln", "klklejlkr", listener);
     }
 }

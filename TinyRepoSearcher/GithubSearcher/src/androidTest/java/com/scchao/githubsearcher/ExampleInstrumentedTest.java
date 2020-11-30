@@ -24,32 +24,34 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     Context context;
+    GitRepoSearcher searcher;
 
     @Before
     public void beforeTest() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        searcher = new GitRepoSearcher(context);
     }
 
     @Test
     public void normalFetchParserCase() {
-        GitRepoSearcher searcher = new GitRepoSearcher(context, new RequestFetchListener() {
-            @Override
-            public void onFetch(boolean success, List<RepoItem> items) {
-                assertEquals(true, success);
-                assertTrue(items.size() > 0);
-            }
-        });
-        searcher.searchWith("android", "rakutentech");
+        searcher.searchWith("android", "rakutentech",
+                new RequestFetchListener() {
+                    @Override
+                    public void onFetch(boolean success, List<RepoItem> items) {
+                        assertEquals(true, success);
+                        assertTrue(items.size() > 0);
+                    }
+                });
     }
 
     @Test
     public void fetchParserCaseWithRandomInput() {
-        GitRepoSearcher searcher = new GitRepoSearcher(context, new RequestFetchListener() {
-            @Override
-            public void onFetch(boolean success, List<RepoItem> items) {
-                assertEquals(false, success);
-            }
-        });
-        searcher.searchWith("adakjdjln", "klklejlkr");
+        searcher.searchWith("adakjdjln", "klklejlkr",
+                new RequestFetchListener() {
+                    @Override
+                    public void onFetch(boolean success, List<RepoItem> items) {
+                        assertEquals(false, success);
+                    }
+                });
     }
 }
